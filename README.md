@@ -99,7 +99,7 @@ Once done with those configurations, it is now time to create the `grader` user 
 ## Step 4: Create user Grader; Sudo! Sudo! Sudo!
 1. Run the following command to create the user:
 
-    `sudo adduser grader`
+    `sudo adduser grader   #password: udacity`
     
 2. To give the grader user permission to sudo, run the following command:
 
