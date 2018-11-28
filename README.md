@@ -166,7 +166,7 @@ Alright! `grader` user is setup. Now, we just need one last thing before we star
     `sudo service ssh restart`
     
 
-And, we are done with the first Part of the Configuration! The next part we will start deploying our application. 
+And, we are done with the first Part of the Configuration! We will start deploying our application in the next part. 
 
 > *Note:* By now, you might have lost access to your LightSail terminal. Don't worry! Since you configured the grader user with the key-pair you generated, you can easily log into the server using your own terminal. Simply run `ssh -i ~/.ssh/yourFile name grader@PUBLIC IP ADDRESS -p 2200` in your terminal. If you are prompted to continue the connection, type 'yes'. And voila, you are logged in!
 
