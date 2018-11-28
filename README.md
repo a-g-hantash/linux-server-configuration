@@ -154,6 +154,7 @@ And, we are done with the first Part of the Configuration! The next part we will
 1. Make sure the timezone is UTC by running the following command:
     `date`
 2. Incase it is not UTC, run the following command:
+
     `sudo timedatectl set-timezone UTC`
     
 ## Step 2: Apache time!
