@@ -173,7 +173,7 @@ And, we are done with the first Part of the Configuration! We will start deployi
 
 ### 2. Flask Application Deployment
 
-Let's get into deployying our application for real now!
+Let's get into deploying our application for real now!
 
 ## Step 1: Configure Timezone
 1. Make sure the timezone is UTC by running the following command:
@@ -222,7 +222,7 @@ We will now configure the PostgreSQL package
     ```
 
 ## Step 4: Git Time!
-1. Install git (if not already installed. Run the following command: 
+1. Install git (if not already installed). Run the following command: 
 
     `sudo apt-get install git`
 
@@ -260,8 +260,10 @@ We will now configure the PostgreSQL package
         app.run()
         
     And remove:
+    
         ```
          app.debug = True
+         
          app.run(host='0.0.0.0', port=8080)
          ```
 
