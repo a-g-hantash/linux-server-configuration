@@ -381,7 +381,7 @@ We will now configure the PostgreSQL package
 
 [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
 
-[Leo Wang's Bloh](http://leonwang.me/post/deploy-flask)
+[Leo Wang's Blog](http://leonwang.me/post/deploy-flask)
 
 [Google in General](https://www.google.com/)
 
