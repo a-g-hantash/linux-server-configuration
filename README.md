@@ -261,11 +261,10 @@ We will now configure the PostgreSQL package
         
     And remove:
     
-        ```
+        
          app.debug = True
-         
          app.run(host='0.0.0.0', port=8080)
-         ```
+         
 
     d. Import additional modules into your `database_setup.py` file:
         
