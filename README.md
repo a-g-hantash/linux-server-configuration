@@ -248,15 +248,15 @@ We will now configure the PostgreSQL package
 
     c. Import additional modules into your `app.py` file:
         
-        ```
+        
         import os
         import logging
         import psycopg2
-        ```
+        
         
     In the same file, in the main method, add:
         
-        `app.run()`
+        app.run()
         
     And remove:
         ```
@@ -266,17 +266,15 @@ We will now configure the PostgreSQL package
 
     d. Import additional modules into your `database_setup.py` file:
         
-        ```
         import os
         import sys
         import psycopg2
-        ```
+        
 
     e. Import additional modules into your `databse_init.py` file:
         
-        ```
         import psycopg2
-        ```
+        
 3. Create your _.wsgi_ file. Run the following commands:
 
     ```
@@ -378,8 +376,13 @@ We will now configure the PostgreSQL package
 ## References
 
 **Udacity Forums**
+
 **GitHub**
+
 [DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
+
 [Leo Wang's Bloh](http://leonwang.me/post/deploy-flask)
+
 [Google in General](https://www.google.com/)
+
 [StackOverflow](https://stackoverflow.com/)
