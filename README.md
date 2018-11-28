@@ -72,6 +72,7 @@ This will ensure your instance is updated to the latest version of its packages.
     `sudo nano /etc/ssh/sshd_config`
         
 Around line 5-6, change **PORT 22** to **PORT 2200** 
+
 Save the file: `CTRL + X Y Enter`
 
 Now its time to configure the Uncomplicated Firewall (UFW)** to only allow incoming connections for SSH (port 2200), HTTP (port 80), and NTP (port 123).
