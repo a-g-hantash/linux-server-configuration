@@ -107,7 +107,7 @@ Once done with those configurations, it is now time to create the `grader` user 
     
 3. Inside the now open file, add the following text:
 
-        **"grader  ALL=(ALL:ALL) ALL"**
+      **"grader  ALL=(ALL:ALL) ALL"**
         
 4. Save and Exit the file: `CTRL + X Y Enter`
 
@@ -134,7 +134,6 @@ That's it! Now your grader user has sudo permissions! It is now time to allow th
     sudo mkdir /home/grader/.ssh
     sudo touch /home/grader/.ssh/authorized_keys
     sudo nano /home/grader/.ssh/authorized_keys
-
     ```
     
     Within the opened file, paste the line you just copied inside and Save: `CTRL + X, Y, Enter`
@@ -145,9 +144,7 @@ That's it! Now your grader user has sudo permissions! It is now time to allow th
     sudo chown grader:grader /home/grader/.ssh
     sudo chmod 700 /home/grader/.ssh
     sudo chmod 644 /home/grader/.ssh/authorized_keys
-
     ```
-    
     
 Alright! `grader` user is setup. Now, we just need one last thing before we start deploying our application!
 
@@ -159,6 +156,7 @@ Alright! `grader` user is setup. Now, we just need one last thing before we star
 2. Navigate the file until you find the following: 
 
     **PermitRootLogin** - Change to **no**
+    
     **PasswordAuthentication** - Change to **no**
 
 ## Step 6: Restart the SSH Service 
@@ -173,6 +171,8 @@ And, we are done with the first Part of the Configuration! The next part we will
 
 
 ## 2. Flask Application Deployment
+
+Let's get into deployying our application for real now!
 
 ## Step 1: Configure Timezone
 1. Make sure the timezone is UTC by running the following command:
@@ -205,7 +205,7 @@ We will now configure the PostgreSQL package
 
     ```     
     sudo apt-get install libpq-dev python-dev               # for python development
-    sudo apt-get install postgresql postgresql-contrib      # install the postgresql package and additional facilities for it
+    sudo apt-get install postgresql postgresql-contrib      # install the postgresql package
     sudo nano /etc/postgresql/9.5/main/pg_hba.conf          # check the configuration file for remote connections 
     ```
     
@@ -214,7 +214,7 @@ We will now configure the PostgreSQL package
 2. Inside the database, run the following:
 
     ```
-    sudo -u postgres psql                                   # Change into user `postgres` and access the psql command line
+    sudo -u postgres psql                                   # Change into user `postgres` & access the psql
     CREATE USER catalog WITH PASSWORD 'catalog';            # Create user 
     ALTER USER catalog CREATEDB;                            # Alter the user
     CREATE DATABASE catalog WITH OWNER catalog;             # Create the database
@@ -224,8 +224,162 @@ We will now configure the PostgreSQL package
 1. Install git (if not already installed. Run the following command: 
 
     `sudo apt-get install git`
-    
-It is now time to actually deploy our application (Item Catalog)
 
 ## Step 5: Deployment Time!
+1. Clone the git repositroy for your Item Catalog Project & place it the appropriate directory:
+    
+    ```
+    cd /var/www
+    sudo mkdir catalog
+    sudo chown -R grader:grader catalog
+    cd catalog
+    sudo git clone https://github.com/a-g-hantash/item-catalog-project.git catalog
+    ```
+    
+2. Change your files (database_setup.py, database_init.py, app.py) for the application to work
+    
+    a. Change all `create_engine` lines to:
+    
+    `create_engine('postgresql://catalog:yourPassword@localhost/catalog')`
 
+    b. Give the absolute path for the `client_secrets.json` file:
+    
+    `/var/www/catalog/catalog/client_secrets.json`
+
+    c. Import additional modules into your `app.py` file:
+        
+        ```
+        import os
+        import logging
+        import psycopg2
+        ```
+        
+    In the same file, in the main method, add:
+        
+        `app.run()`
+        
+    And remove:
+        ```
+         app.debug = True
+         app.run(host='0.0.0.0', port=8080)
+         ```
+
+    d. Import additional modules into your `database_setup.py` file:
+        
+        ```
+        import os
+        import sys
+        import psycopg2
+        ```
+
+    e. Import additional modules into your `databse_init.py` file:
+        
+        ```
+        import psycopg2
+        ```
+3. Create your _.wsgi_ file. Run the following commands:
+
+    ```
+    cd /var/www/catalog  
+    sudo touch /var/www/catalog/catalog.wsgi
+    sudo nano /var/www/catalog/catalog.wsgi
+    ```
+    
+   a. Inside the file, write the following:
+    
+    ```
+    import sys
+    import logging
+    
+    logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
+    sys.path.insert(0, "/var/www/catalog/")
+    sys.path.append('/var/www/catalog/catalog/')
+    sys.path.append('/usr/local/bin/python3.5/site-packages')
+
+
+    from catalog import app as application
+    application.secret_key = 'super_secret_key
+    ```
+    
+    b. Save the file: `CTRL + X, Y, Enter`
+
+4. Configure a New VirtualHost. Run the following commands:
+    
+    `sudo nano /etc/apache2/sites-available/catalog.conf`
+    
+    a. Inside the file, write the following:
+    
+    ```
+    WSGIApplicationGroup %{GLOBAL}
+    WSGIRestrictEmbedded On
+
+    <VirtualHost *:80>
+        ServerName 18.185.16.61
+        ServerAlias ec2-18-185-16-61.eu-central-1.compute.amazonaws.com
+        ServerAdmin grader@18.185.16.61
+        WSGIDaemonProcess catalog
+        WSGIProcessGroup catalog
+        WSGIScriptAlias / /var/www/catalog/catalog.wsgi
+
+        <Directory /var/www/catalog/catalog/>
+            Order allow,deny
+            Allow from all
+        </Directory>
+
+        Alias /static /var/www/catalog/catalog/static
+        
+        <Directory /var/www/catalog/catalog/static/>
+            Order allow,deny
+            Allow from all
+        </Directory>
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        LogLevel warn
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+    </VirtualHost>
+    ```
+    
+     b. Save the file: `CTRL + X, Y, Enter`
+     
+5. Install all the dependencies
+
+    ```
+    sudo apt-get install python3-flask
+    sudo apt-get install python3-sqlalchemy
+    sudo apt-get install python3-psycopg2
+    sudo apt-get install python3-oauth2client
+    sudo apt-get install python3-httplib2
+    ```
+    
+6. Rename app.py. Run the following command:
+
+    `mv app.py __init__.py`
+    
+7. Enable the catalog virtual host and disable the default site. Run the following commands:
+    
+    ```
+    sudo a2ensite catalog.conf
+    sudo service apache2 restart
+    sudo a2dissite 000-default.conf
+    sudo service apache2 restart
+    ```
+8. Enable the virtual site. Run the following command: 
+
+    ```
+    sudo a2ensite catalog
+    sudo service apache2 restart
+    ```
+9. Go to http://ec2-18-185-16-61.eu-central-1.compute.amazonaws.com
+    
+
+# And all done! If you visit your application url or your IP address, you should see your site live!
+
+
+## References
+
+**Udacity Forums**
+**GitHub**
+[DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-deploy-a-flask-application-on-an-ubuntu-vps)
+[Leo Wang's Bloh](http://leonwang.me/post/deploy-flask)
+[Google in General](https://www.google.com/)
+[StackOverflow](https://stackoverflow.com/)
