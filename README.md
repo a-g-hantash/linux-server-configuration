@@ -370,7 +370,7 @@ We will now configure the PostgreSQL package
 9. Go to http://ec2-18-185-16-61.eu-central-1.compute.amazonaws.com
     
 
-# And all done! If you visit your application url or your IP address, you should see your site live!
+**And all done! If you visit your application URL or your IP address, you should see your site live!**
 
 
 ## References
