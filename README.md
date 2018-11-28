@@ -14,9 +14,9 @@ This is the third project in the Udacity Full-Stack Nanodegree. The project take
 
 This summary will hopefully walk you through all the steps you need to secure your server, install dependinces and get your web application up and running in no time!
 
-### Walkthrough Steps
+# Walkthrough Steps
  
-## 1. The Baseline Installation of a Linux Distribution, Securing it, and Creating Users
+### 1. The Baseline Installation of a Linux Distribution, Securing it, and Creating Users
 
 ## Step 1: Get an Amazon LightSail Server
 
@@ -170,7 +170,7 @@ And, we are done with the first Part of the Configuration! The next part we will
 > *Note:* By now, you might have lost access to your LightSail terminal. Don't worry! Since you configured the grader user with the key-pair you generated, you can easily log into the server using your own terminal. Simply run `ssh -i ~/.ssh/yourFile name grader@PUBLIC IP ADDRESS -p 2200` in your terminal. If you are prompted to continue the connection, type 'yes'. And voila, you are logged in!
 
 
-## 2. Flask Application Deployment
+### 2. Flask Application Deployment
 
 Let's get into deployying our application for real now!
 
