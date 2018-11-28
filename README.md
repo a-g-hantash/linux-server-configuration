@@ -21,15 +21,15 @@ This summary will hopefully walk you through all the steps you need to secure yo
 
 [Follow the link to start up your own LightSail Server](https://aws.amazon.com/)
 
-    1. Sign up to the Amazon Service
-    2. Once logged in, under **Build a solution tab**, click **Build using virtual servers with LightSail**
-    3. Create your instance: 
-        a. Leave the Instance Location as the default (unless you want to change it! Go ahead!)
-        b. Select **Linux/Unix** from the **Pick your instance image**
-        c. Click **OS Only** and select **Ubuntu 16.04 LTS**
-        d. Select the lowest tier of the payment plans. If you complete the project within a month and shut it down, the price is zero anyway!
-        e. Give your instance a hostname. Can be anything you want.
-        f. Wait for it to start up. Once it says running, you're in business!
+1. Sign up to the Amazon Service
+2. Once logged in, under **Build a solution tab**, click **Build using virtual servers with LightSail**
+3. Create your instance: 
+    a. Leave the Instance Location as the default (unless you want to change it! Go ahead!)
+    b. Select **Linux/Unix** from the **Pick your instance image**
+    c. Click **OS Only** and select **Ubuntu 16.04 LTS**
+    d. Select the lowest tier of the payment plans. If you complete the project within a month and shut it down, the price is zero anyway!
+    e. Give your instance a hostname. Can be anything you want.
+    f. Wait for it to start up. Once it says running, you're in business!
 
 ## Step 2: Configure LightSail Firewall
 
