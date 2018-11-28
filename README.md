@@ -16,6 +16,7 @@ This summary will hopefully walk you through all the steps you need to secure yo
 
 ### Walkthrough Steps
  
+## 1. The Baseline Installation of a Linux Distribution, Securing it, and Creating Users
 
 ## Step 1: Get an Amazon LightSail Server
 
@@ -54,7 +55,7 @@ Now you are ready to start configuring your instance!
 1. In the same line as **Networking**, click on **Connect**
 2. Click the shiny orange button **Connect using SSH**
 
-You are now inside your instance!
+You are now inside your instance using the LightSail terminal!
 
 3. Run the following commands:
     ```
@@ -69,7 +70,7 @@ This will ensure your instance is updated to the latest version of its packages.
     `sudo nano /etc/ssh/sshd_config`
         
 Around line 5-6, change **PORT 22** to **PORT 2200** 
-Save the file: `Ctrl + X Y Enter`
+Save the file: `CTRL + X Y Enter`
 
 Now its time to configure the Uncomplicated Firewall (UFW)** to only allow incoming connections for SSH (port 2200), HTTP (port 80), and NTP (port 123).
 
@@ -99,11 +100,99 @@ Once done with those configurations, it is now time to create the `grader` user 
     `sudo nano /etc/sudoers.d/grader`
 3. Inside the now open file, add the following text:
         **"grader  ALL=(ALL:ALL) ALL"**
-4. Save and Exit the file: `Ctrl + X Y Enter`
+4. Save and Exit the file: `CTRL + X Y Enter`
 
 That's it! Now your grader user has sudo permissions! It is now time to allow the grader to access our server!
 
 ## Step 5: Permission Granted!
 1. On your local machine, inside a terminal (Recommended for Windows: Git Bash), run the following command:
     `ssh-keygen`
-2. 
+2. Enter the path you want to save the key-pairs in.
+    `/c/Users/yourDesktopName/.ssh/yourFileName`
+3. Once the key is created, run the following command:
+    `cat ~/.ssh/yourFileName.pub`
+4. Copy the whole line that is displayed. 
+5. Back on your LightSail terminal, run the following commands:
+    ```
+    sudo mkdir /home/grader/.ssh
+    sudo touch /home/grader/.ssh/authorized_keys
+    sudo nano /home/grader/.ssh/authorized_keys
+
+    ```
+    Within the opened file, paste the line you just copied inside and Save `CTRL + X, Y, Enter`
+    
+    Continue running commands to change file permissions for the `grader` user
+    ```
+    sudo chown grader:grader /home/grader/.ssh
+    sudo chmod 700 /home/grader/.ssh
+    sudo chmod 644 /home/grader/.ssh/authorized_keys
+
+    ```
+    
+Alright! `grader` user is setup. Now, we just need one last thing before we start deploying our application!
+
+## Step 5: RootLogin: Permission Denied!
+1. Run the following command: 
+    `sudo nano /etc/ssh/sshd_config`
+2. Navigate the file until you find the following: 
+    **PermitRootLogin** - Change to **no**
+    **PasswordAuthentication** - Change to **no**
+
+## Step 6: Restart the SSH Service 
+1. Run the following command: 
+    `sudo service ssh restart`
+    
+
+And, we are done with the first Part of the Configuration! The next part we will start deploying our application. 
+
+> *Note:* By now, you might have lost access to your LightSail terminal. Don't worry! Since you configured the grader user with the key-pair you generated, you can easily log into the server using your own terminal. Simply run `ssh -i ~/.ssh/yourFile name grader@PUBLIC IP ADDRESS -p 2200` in your terminal. If you are prompted to continue the connection, type 'yes'. And voila, you are logged in!
+
+
+## 2. Flask Application Deployment
+
+## Step 1: Configure Timezone
+1. Make sure the timezone is UTC by running the following command:
+    `date`
+2. Incase it is not UTC, run the following command:
+    `sudo timedatectl set-timezone UTC`
+    
+## Step 2: Apache time!
+We will now configure the Apache to serve Python mod_wsgi applications. 
+
+1. Run the following commands: 
+    ```
+    sudo apt-get install apache2                    # install the apache2 package
+    sudo apt-get install libapache2-mod-wsgi-py3    # install the mod_wsgi package for Python3
+    sudo a2enmod wsgi                               # enable mod_wsgi
+    sudo service apache2 restart                    # restart the service 
+    ```
+> *Note:* If you have built your application with Python2, use the following command instead `sudo apt-get install libapache2-mod-wsgi`
+
+
+## Step 3: PostgreSQL Time!
+We will now configure the PostgreSQL package
+
+1. Run the following commands: 
+    ```     
+    sudo apt-get install libpq-dev python-dev               # for python development
+    sudo apt-get install postgresql postgresql-contrib      # install the postgresql package and additional facilities for it
+    sudo nano /etc/postgresql/9.5/main/pg_hba.conf          # check the configuration file for remote connections 
+    ```
+    > *Note:* To ensure that remote connections to PostgreSQL are not allowed, check that the configuration file so that it only allows connections from the local host addresses **127.0.0.1** for IPv4 and **::1** for IPv6.
+    
+2. Inside the database, run the following:
+    ```
+    sudo -u postgres psql                                   # Change into user `postgres` and access the psql command line
+    CREATE USER catalog WITH PASSWORD 'catalog';            # Create user 
+    ALTER USER catalog CREATEDB;                            # Alter the user
+    CREATE DATABASE catalog WITH OWNER catalog;             # Create the database
+    ```
+
+## Step 4: Git Time!
+1. Install git (if not already installed. Run the following command: 
+    `sudo apt-get install git`
+    
+It is now time to actually deploy our application (Item Catalog)
+
+## Step 5: Deployment Time!
+
