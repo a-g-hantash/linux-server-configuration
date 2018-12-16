@@ -4,15 +4,17 @@
 
 This is the third project in the Udacity Full-Stack Nanodegree. The project takes a baseline installation of a Linux Distribution and prepare it to host web applications, including installing updates and securing it from a number of attack vectors.
 
-- IP Address: 18.185.16.61
+- IP Address: ~~18.185.16.61~~
 
 - Accessible SSH port: 2200
 
-- Application URL: http://ec2-18-185-16-61.eu-central-1.compute.amazonaws.com
+- Application URL: ~~http://ec2-18-185-16-61.eu-central-1.compute.amazonaws.com~~
 
 - SSH Connection: ssh -i ~/.ssh/[keyFile] grader@18.185.16.61 -p 2200
 
 This summary will hopefully walk you through all the steps you need to secure your server, install dependinces and get your web application up and running in no time!
+
+> *Note:* I have gradutaed from this course so the server is now down. However, I hope this documentation will continue to help future students with their own courses and beyond. Best of luck!
 
 # Walkthrough Steps
  
